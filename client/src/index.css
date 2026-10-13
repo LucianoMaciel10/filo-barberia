@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colores del Design System */
+  --color-charcoal: #1f2933;
+  --color-fondo: #faf7f2;
+  --color-dorado: #c8963e;
+  --color-confirmado: #28724d;
+  --color-pendiente: #fff3cc;
+  --color-cancelado: #b5443e;
+
+  /* Tonos de apoyo (aproximados, ver nota abajo) */
+  --color-arena: #f2ebe0; /* botón deshabilitado, chips ocupados, skeleton */
+  --color-dorado-suave: #f6e9d0; /* día destacado del calendario, aviso pendiente */
+  --color-confirmado-suave: #e8f3ec;
+  --color-cancelado-suave: #fbe6e4;
+  --color-borde: #e8e2d8;
+
+  /* Tipografías */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Lora", ui-serif, Georgia, serif;
+
+  /* Radio */
+  --radius-brand: 12px;
+}
+
+@layer base {
+  body {
+    @apply bg-fondo text-charcoal font-sans antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-heading;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-dorado;
+  }
+}
