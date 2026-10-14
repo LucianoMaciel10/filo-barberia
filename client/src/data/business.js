@@ -13,4 +13,6 @@ export const business = {
     { label: "Instagram", href: "https://instagram.com" },
     { label: "WhatsApp", href: "https://wa.me/5491122334455" },
   ],
+  phone: "+5491155554820",
+  phoneDisplay: "+54 9 11 5555-4820",
 };
