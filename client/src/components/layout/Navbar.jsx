@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import Logo from "./Logo";
+import { business } from "../../data/business";
 
 const links = [
   { label: "Servicios", href: "#servicios" },
@@ -12,11 +13,27 @@ function Navbar() {
   const [open, setOpen] = useState(false);
   const closeMenu = () => setOpen(false);
 
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const handler = (e) => e.matches && setOpen(false);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-borde bg-fondo">
       <nav
         aria-label="Principal"
-        className="flex h-20 items-center justify-between px-6 md:h-24 md:px-20"
+        className={`flex h-20 items-center justify-between px-6 md:h-24 md:px-20 ${
+          open ? "bg-charcoal text-fondo" : "text-charcoal"
+        }`}
       >
         <a href="#" onClick={closeMenu} aria-label="Filo Barbería, inicio">
           <Logo />
@@ -61,10 +78,10 @@ function Navbar() {
       {open && (
         <div
           id="menu-mobile"
-          className="absolute inset-x-0 top-full bg-charcoal px-6 py-8 text-fondo md:hidden"
+          className="absolute inset-x-0 top-full flex h-[calc(100dvh-5rem)] flex-col overflow-y-auto bg-charcoal px-6 py-8 text-fondo md:hidden"
         >
-          <ul className="space-y-5 text-xl">
-            {links.map((link) => (
+          <ul className="space-y-5 font-heading text-3xl">
+            {[{ label: "Inicio", href: "#" }, ...links].map((link) => (
               <li key={link.href}>
                 <a href={link.href} onClick={closeMenu}>
                   {link.label}
@@ -72,13 +89,52 @@ function Navbar() {
               </li>
             ))}
           </ul>
-          <a
-            href="#"
-            onClick={closeMenu}
-            className="mt-8 block rounded-brand bg-dorado py-3 text-center font-semibold text-charcoal"
-          >
-            Ingresá
-          </a>
+
+          <div className="mt-10 space-y-3">
+            <a
+              href="#"
+              onClick={closeMenu}
+              className="block rounded-brand bg-dorado py-3 text-center text-sm font-semibold text-charcoal"
+            >
+              Reservar turno
+            </a>
+            <a
+              href="#"
+              onClick={closeMenu}
+              className="block rounded-brand bg-dorado py-3 text-center text-sm font-semibold text-charcoal"
+            >
+              Ingresá a tu cuenta
+            </a>
+          </div>
+
+          <div className="mt-auto space-y-4 border-t border-fondo/15 pt-6 text-sm">
+            <p>
+              {business.address}, {business.neighborhood} · {business.city}
+            </p>
+
+            <ul className="space-y-1 text-fondo/70">
+              {business.hours.map(({ days, time }) => (
+                <li key={days}>
+                  {days} · {time}
+                </li>
+              ))}
+            </ul>
+
+            <ul className="flex gap-3 text-dorado">
+              {business.socials.map((social, index) => (
+                <li key={social.label} className="flex gap-3">
+                  {index > 0 && <span aria-hidden="true">·</span>}
+                  <a
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {social.label} ↗
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       )}
     </header>
