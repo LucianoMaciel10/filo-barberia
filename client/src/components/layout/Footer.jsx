@@ -1,9 +1,5 @@
 import Logo from "./Logo";
-
-const socials = [
-  { label: "Instagram", href: "https://instagram.com" },
-  { label: "WhatsApp", href: "https://wa.me/5491122334455" },
-];
+import { business } from "../../data/business";
 
 function Footer() {
   const year = new Date().getFullYear();
@@ -18,7 +14,7 @@ function Footer() {
         </p>
 
         <ul className="flex items-center gap-3 text-sm md:justify-end">
-          {socials.map((social, index) => (
+          {business.socials.map((social, index) => (
             <li key={social.label} className="flex items-center gap-3">
               {index > 0 && <span aria-hidden="true">·</span>}
               <a
@@ -35,7 +31,7 @@ function Footer() {
       </div>
 
       <p className="mt-8 text-xs text-fondo/60">
-        © {year} Filo Barbería ·{" "}
+        © {year} {business.name} ·{" "}
         <a href="#" className="hover:text-fondo">
           Privacidad
         </a>{" "}

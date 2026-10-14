@@ -1,5 +1,6 @@
 import { ArrowUpRight, MapPin } from "lucide-react";
 import heroImg from "../../assets/hero-barberia.png";
+import { business } from "../../data/business";
 
 function Hero() {
   return (
@@ -16,7 +17,7 @@ function Hero() {
         </h1>
 
         <p className="mt-6  text-charcoal/70">
-          Un corte que te representa, una charla sin apuro. 
+          Un corte que te representa, una charla sin apuro.
           <span className="block"> Tu próxima visita a Filo empieza acá.</span>
         </p>
 
@@ -38,7 +39,8 @@ function Hero() {
 
         <p className="mt-8 flex items-center gap-2 text-sm text-charcoal/60">
           <MapPin className="size-4 text-dorado" aria-hidden="true" />
-          Palermo, Buenos Aires · Desde 2018
+          {business.neighborhood}, {business.city} · Desde{" "}
+          {business.foundedYear}
         </p>
       </div>
 
