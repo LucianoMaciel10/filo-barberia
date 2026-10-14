@@ -6,18 +6,18 @@ function Hero() {
     <section className="flex-1 grid items-center gap-8 py-10 md:py-16 md:grid-cols-2">
       {/* Texto */}
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wider text-dorado-oscuro">
+        <p className="text-xs font-bold uppercase tracking-wider text-dorado-oscuro">
           Oficio, estilo y un buen momento
         </p>
 
-        <h1 className="mt-6 text-[40px] leading-[1.1] lg:text-[56px]">
+        <h1 className="mt-6 text-[40px] leading-[1.1] lg:text-[56px] xl:text-7xl">
           Tu estilo.
           <span className="block text-nowrap">Nuestro oficio.</span>
         </h1>
 
-        <p className="mt-6 max-w-md text-charcoal/70">
-          Un corte que te representa, una charla sin apuro. Tu próxima visita a
-          Filo empieza acá.
+        <p className="mt-6  text-charcoal/70">
+          Un corte que te representa, una charla sin apuro. 
+          <span className="block"> Tu próxima visita a Filo empieza acá.</span>
         </p>
 
         <div className="mt-8 flex flex-wrap items-center gap-6">
