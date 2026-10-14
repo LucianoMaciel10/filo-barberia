@@ -5,7 +5,7 @@ function ServicesSection() {
   return (
     <section
       id="servicios"
-      className="scroll-mt-20 px-6 py-16 md:scroll-mt-24 md:py-20 xl:px-30"
+      className="bg-arena scroll-mt-20 px-6 py-16 md:scroll-mt-24 md:py-20 xl:px-30"
     >
       <p className="text-xs font-bold uppercase tracking-wider text-dorado-oscuro">
         El menú de Filo
