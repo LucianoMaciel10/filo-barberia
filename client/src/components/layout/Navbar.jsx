@@ -44,7 +44,11 @@ function Navbar() {
           open ? "bg-charcoal text-fondo" : "text-charcoal"
         }`}
       >
-        <Link to="/" onClick={handleLogoClick} aria-label="Filo Barbería, inicio">
+        <Link
+          to="/"
+          onClick={handleLogoClick}
+          aria-label="Filo Barbería, inicio"
+        >
           <Logo />
         </Link>
 
@@ -90,7 +94,12 @@ function Navbar() {
           className="absolute inset-x-0 top-full flex h-[calc(100dvh-5rem)] flex-col overflow-y-auto bg-charcoal px-6 py-8 text-fondo md:hidden"
         >
           <ul className="space-y-5 font-heading text-3xl">
-            {[{ label: "Inicio", href: "#" }, ...links].map((link) => (
+            <li>
+              <Link to="/" onClick={handleLogoClick}>
+                Inicio
+              </Link>
+            </li>
+            {links.map((link) => (
               <li key={link.href}>
                 <a href={link.href} onClick={closeMenu}>
                   {link.label}
