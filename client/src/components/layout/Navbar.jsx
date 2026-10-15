@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import Logo from "./Logo";
 import { business } from "../../data/business";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const links = [
   { label: "Servicios", href: "#servicios" },
@@ -13,6 +13,14 @@ const links = [
 function Navbar() {
   const [open, setOpen] = useState(false);
   const closeMenu = () => setOpen(false);
+  const { pathname } = useLocation();
+
+  const handleLogoClick = () => {
+    closeMenu();
+    if (pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -36,7 +44,7 @@ function Navbar() {
           open ? "bg-charcoal text-fondo" : "text-charcoal"
         }`}
       >
-        <Link to="/" onClick={closeMenu} aria-label="Filo Barbería, inicio">
+        <Link to="/" onClick={handleLogoClick} aria-label="Filo Barbería, inicio">
           <Logo />
         </Link>
 
