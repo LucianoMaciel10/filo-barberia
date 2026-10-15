@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import Logo from "./Logo";
 import { business } from "../../data/business";
+import { Link } from "react-router-dom";
 
 const links = [
   { label: "Servicios", href: "#servicios" },
@@ -35,9 +36,9 @@ function Navbar() {
           open ? "bg-charcoal text-fondo" : "text-charcoal"
         }`}
       >
-        <a href="#" onClick={closeMenu} aria-label="Filo Barbería, inicio">
+        <Link to="/" onClick={closeMenu} aria-label="Filo Barbería, inicio">
           <Logo />
-        </a>
+        </Link>
 
         {/* Links desktop */}
         <ul className="hidden items-center gap-8 md:flex">
@@ -52,12 +53,12 @@ function Navbar() {
             </li>
           ))}
           <li>
-            <a
-              href="#"
+            <Link
+              to="/login"
               className="rounded-brand border border-borde bg-white px-5 py-3 text-sm font-semibold transition-colors hover:border-dorado"
             >
               Ingresá
-            </a>
+            </Link>
           </li>
         </ul>
 
@@ -98,13 +99,13 @@ function Navbar() {
             >
               Reservar turno
             </a>
-            <a
-              href="#"
+            <Link
+              to="/login"
               onClick={closeMenu}
               className="block rounded-brand bg-dorado py-3 text-center text-sm font-semibold text-charcoal"
             >
               Ingresá a tu cuenta
-            </a>
+            </Link>
           </div>
 
           <div className="mt-auto space-y-4 border-t border-fondo/15 pt-6 text-sm">

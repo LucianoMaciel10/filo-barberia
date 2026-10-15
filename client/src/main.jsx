@@ -7,9 +7,12 @@ import "@fontsource/inter/600.css";
 import "@fontsource/lora/400.css";
 import "@fontsource/lora/500.css";
 import "./index.css";
+import { BrowserRouter } from "react-router-dom";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </StrictMode>,
 );
