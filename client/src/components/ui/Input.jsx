@@ -1,10 +1,7 @@
-import { forwardRef, useId, useState } from "react";
+import { useId, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
-const Input = forwardRef(function Input(
-  { label, error, type = "text", ...props },
-  ref,
-) {
+function Input({ label, error, type = "text", ref, ...props }) {
   const id = useId();
   const errorId = `${id}-error`;
   const [show, setShow] = useState(false);
@@ -48,6 +45,6 @@ const Input = forwardRef(function Input(
       )}
     </div>
   );
-});
+}
 
 export default Input;
