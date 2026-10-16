@@ -1,9 +1,10 @@
 import { useId, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
-function Input({ label, error, type = "text", ref, ...props }) {
+function Input({ label, error, hint, type = "text", ref, ...props }) {
   const id = useId();
   const errorId = `${id}-error`;
+  const hintId = `${id}-hint`;
   const [show, setShow] = useState(false);
   const isPassword = type === "password";
 
@@ -19,7 +20,7 @@ function Input({ label, error, type = "text", ref, ...props }) {
           id={id}
           type={isPassword && show ? "text" : type}
           aria-invalid={!!error}
-          aria-describedby={error ? errorId : undefined}
+          aria-describedby={error ? errorId : hint ? hintId : undefined}
           className={`h-12 w-full rounded-brand border bg-white px-4 text-sm placeholder:text-charcoal/40 ${
             error ? "border-cancelado" : "border-borde"
           } ${isPassword ? "pr-12" : ""}`}
@@ -38,10 +39,16 @@ function Input({ label, error, type = "text", ref, ...props }) {
         )}
       </div>
 
-      {error && (
+      {error ? (
         <p id={errorId} className="mt-1 text-xs text-cancelado">
           {error}
         </p>
+      ) : (
+        hint && (
+          <p id={hintId} className="mt-1 text-xs text-charcoal/60">
+            {hint}
+          </p>
+        )
       )}
     </div>
   );
