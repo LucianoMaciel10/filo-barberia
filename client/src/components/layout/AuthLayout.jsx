@@ -25,15 +25,15 @@ function AuthLayout({ children }) {
               El próximo buen corte empieza con vos
             </p>
             <p className="mt-3 hidden text-sm lg:block text-white/80">
-              Reservá, elegí a tu barbero y manejá tus turnos desde un solo lugar
+              Reservá, elegí a tu barbero y manejá tus turnos desde un solo
+              lugar
             </p>
           </div>
         </div>
       </aside>
 
-      {/* Panel del formulario */}
-      <main className="flex flex-col px-6 py-8 lg:px-20 lg:py-12">
-        <div className="mx-auto flex w-full max-w-xl my-auto flex-col">
+      <main className="px-6 py-6 lg:px-20 lg:py-8">
+        <div className="mx-auto w-full max-w-xl">
           <Link
             to="/"
             className="inline-flex w-fit items-center gap-2 text-sm transition-colors hover:text-dorado"
@@ -42,7 +42,12 @@ function AuthLayout({ children }) {
             Volver a Filo
           </Link>
 
-          <div className="my-auto py-10">{children}</div>
+          <div className="pt-8 lg:pt-10">{children}</div>
+
+          <p className="mt-6 text-xs text-charcoal/60">
+            Tu información está segura. Solo la usamos para gestionar tus
+            turnos.
+          </p>
         </div>
       </main>
     </div>

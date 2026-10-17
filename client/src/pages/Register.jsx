@@ -5,6 +5,8 @@ import { z } from "zod";
 import AuthLayout from "../components/layout/AuthLayout";
 import Checkbox from "../components/ui/Checkbox";
 import Input from "../components/ui/Input";
+import FormAlert from "../components/ui/FormAlert";
+import { useFocusFirstError } from "../hooks/useFocusFirstError";
 
 const schema = z.object({
   name: z.string().trim().min(3, "Ingresá tu nombre y apellido"),
@@ -27,11 +29,15 @@ function Register() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    setFocus,
+    formState: { errors, isSubmitting, submitCount },
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: { terms: false },
+    shouldFocusError: false,
   });
+  const hasErrors = Object.keys(errors).length > 0;
+  useFocusFirstError({ errors, submitCount, setFocus });
 
   const onSubmit = async (data) => {
     // TODO: conectar con la API cuando esté el backend
@@ -47,10 +53,16 @@ function Register() {
         Creá tu cuenta y reservá tu primer turno
       </p>
 
+      <FormAlert
+        show={hasErrors}
+        title="Revisá los datos para crear tu cuenta"
+        message="Corregí los campos y aceptá los términos."
+      />
+
       <form
         onSubmit={handleSubmit(onSubmit)}
         noValidate
-        className="mt-8 space-y-5"
+        className="mt-6 space-y-2"
       >
         <Input
           label="Nombre y apellido"
@@ -108,10 +120,6 @@ function Register() {
         <Link to="/login" className="font-semibold hover:text-dorado">
           Ingresá
         </Link>
-      </p>
-
-      <p className="mt-10 text-xs text-charcoal/60">
-        Tu información está segura. Solo la usamos para gestionar tus turnos.
       </p>
     </AuthLayout>
   );

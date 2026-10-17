@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { z } from "zod";
 import AuthLayout from "../components/layout/AuthLayout";
 import Input from "../components/ui/Input";
+import FormAlert from "../components/ui/FormAlert";
+import { useFocusFirstError } from "../hooks/useFocusFirstError";
 
 const schema = z.object({
   email: z.email("Ingresá un correo válido"),
@@ -14,12 +16,14 @@ function Login() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm({ resolver: zodResolver(schema) });
+    setFocus,
+    formState: { errors, isSubmitting, submitCount },
+  } = useForm({ resolver: zodResolver(schema), shouldFocusError: false });
+  const hasErrors = Object.keys(errors).length > 0;
+  useFocusFirstError({ errors, submitCount, setFocus });
 
   const onSubmit = async (data) => {
     // TODO: conectar con la API cuando esté el backend
-    
     console.log("login", data.email);
   };
 
@@ -32,10 +36,16 @@ function Login() {
         Ingresá para reservar o ver tus próximos turnos
       </p>
 
+      <FormAlert
+        show={hasErrors}
+        title="Revisá tus datos"
+        message="Corregí los campos marcados para ingresar."
+      />
+
       <form
         onSubmit={handleSubmit(onSubmit)}
         noValidate
-        className="mt-8 space-y-5"
+        className="mt-6 space-y-2"
       >
         <Input
           label="Correo electrónico"
@@ -75,10 +85,6 @@ function Login() {
         <Link to="/registro" className="font-semibold hover:text-dorado">
           Registrate
         </Link>
-      </p>
-
-      <p className="mt-10 text-xs text-charcoal/60">
-        Tu información está segura. Solo la usamos para gestionar tus turnos.
       </p>
     </AuthLayout>
   );
