@@ -21,11 +21,9 @@ function Checkbox({ label, error, ref, ...props }) {
         </label>
       </div>
 
-      {error && (
-        <p id={errorId} className="mt-1 text-xs text-cancelado">
-          {error}
-        </p>
-      )}
+      <p id={errorId} className="mt-1 min-h-4 text-xs text-cancelado">
+        {error}
+      </p>
     </div>
   );
 }

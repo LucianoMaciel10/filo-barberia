@@ -3,10 +3,10 @@ import { Eye, EyeOff } from "lucide-react";
 
 function Input({ label, error, hint, type = "text", ref, ...props }) {
   const id = useId();
-  const errorId = `${id}-error`;
-  const hintId = `${id}-hint`;
+  const messageId = `${id}-message`;
   const [show, setShow] = useState(false);
   const isPassword = type === "password";
+  const message = error ?? hint;
 
   return (
     <div>
@@ -20,7 +20,7 @@ function Input({ label, error, hint, type = "text", ref, ...props }) {
           id={id}
           type={isPassword && show ? "text" : type}
           aria-invalid={!!error}
-          aria-describedby={error ? errorId : hint ? hintId : undefined}
+          aria-describedby={message ? messageId : undefined}
           className={`h-12 w-full rounded-brand border bg-white px-4 text-sm placeholder:text-charcoal/40 ${
             error ? "border-cancelado" : "border-borde"
           } ${isPassword ? "pr-12" : ""}`}
@@ -39,17 +39,14 @@ function Input({ label, error, hint, type = "text", ref, ...props }) {
         )}
       </div>
 
-      {error ? (
-        <p id={errorId} className="mt-1 text-xs text-cancelado">
-          {error}
-        </p>
-      ) : (
-        hint && (
-          <p id={hintId} className="mt-1 text-xs text-charcoal/60">
-            {hint}
-          </p>
-        )
-      )}
+      <p
+        id={messageId}
+        className={`mt-1 min-h-4 text-xs ${
+          error ? "text-cancelado" : "text-charcoal/60"
+        }`}
+      >
+        {message}
+      </p>
     </div>
   );
 }
