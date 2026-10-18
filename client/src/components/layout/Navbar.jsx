@@ -5,9 +5,9 @@ import { business } from "../../data/business";
 import { Link, useLocation } from "react-router-dom";
 
 const links = [
-  { label: "Servicios", href: "#servicios" },
-  { label: "El equipo", href: "#equipo" },
-  { label: "La barbería", href: "#barberia" },
+  { label: "Servicios", href: "/#servicios" },
+  { label: "El equipo", href: "/#equipo" },
+  { label: "La barbería", href: "/#barberia" },
 ];
 
 function Navbar() {
@@ -56,12 +56,12 @@ function Navbar() {
         <ul className="hidden items-center gap-8 md:flex">
           {links.map((link) => (
             <li key={link.href}>
-              <a
-                href={link.href}
+              <Link
+                to={link.href}
                 className="text-sm transition-colors hover:text-dorado"
               >
                 {link.label}
-              </a>
+              </Link>
             </li>
           ))}
           <li>
@@ -101,9 +101,9 @@ function Navbar() {
             </li>
             {links.map((link) => (
               <li key={link.href}>
-                <a href={link.href} onClick={closeMenu}>
+                <Link to={link.href} onClick={closeMenu}>
                   {link.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
