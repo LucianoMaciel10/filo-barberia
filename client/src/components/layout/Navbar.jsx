@@ -148,13 +148,13 @@ function Navbar() {
                 </button>
               ) : (
                 <>
-                  <a
-                    href="#"
+                  <Link
+                    to="/reservar"
                     onClick={closeMenu}
                     className="block rounded-brand bg-dorado py-3 text-center text-sm font-semibold text-charcoal"
                   >
                     Reservar turno
-                  </a>
+                  </Link>
                   <Link
                     to="/login"
                     onClick={closeMenu}

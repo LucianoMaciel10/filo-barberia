@@ -37,12 +37,12 @@ function NotFound() {
         >
           Volver al inicio
         </Link>
-        <a
-          href="#"
+        <Link
+          to="/reservar"
           className="inline-flex h-12 items-center justify-center rounded-brand bg-dorado px-6 text-sm font-semibold transition-colors hover:bg-dorado/90"
         >
           Reservar turno
-        </a>
+        </Link>
       </div>
     </section>
   );

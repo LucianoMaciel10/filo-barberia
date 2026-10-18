@@ -1,6 +1,7 @@
 import { MapPin, Map as MapIcon } from "lucide-react";
 import salonImg from "../../assets/salon-filo.png";
 import { business } from "../../data/business";
+import { Link } from "react-router-dom";
 
 function LocationSection() {
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
@@ -69,12 +70,12 @@ function LocationSection() {
               <MapIcon className="size-5" aria-hidden="true" />
               Cómo llegar
             </a>
-            <a
-              href="#"
+            <Link
+              to="/reservar"
               className="inline-flex h-12 items-center rounded-brand bg-dorado px-6 text-sm font-semibold transition-colors hover:bg-dorado/90"
             >
               Reservar turno
-            </a>
+            </Link>
           </div>
 
           <p className="mt-6 text-xs text-charcoal/60">

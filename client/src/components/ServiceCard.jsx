@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { formatPrice } from "../utils/format";
 
 function ServiceCard({ service }) {
@@ -11,12 +12,12 @@ function ServiceCard({ service }) {
         {formatPrice(price)} · {duration} min
       </p>
 
-      <a
-        href="#"
+      <Link
+        to={`/reservar/servicio?servicio=${service.id}`}
         className="mt-auto flex h-12 items-center justify-center rounded-brand border border-borde text-sm font-semibold transition-colors hover:border-dorado"
       >
         Elegir servicio
-      </a>
+      </Link>
     </article>
   );
 }

@@ -1,6 +1,7 @@
 import { ArrowUpRight, MapPin } from "lucide-react";
 import heroImg from "../../assets/hero-barberia.png";
 import { business } from "../../data/business";
+import { Link } from "react-router-dom";
 
 function Hero() {
   return (
@@ -22,13 +23,13 @@ function Hero() {
         </p>
 
         <div className="mt-8 flex flex-wrap items-center gap-6">
-          <a
-            href="#"
+          <Link
+            to="/reservar"
             className="inline-flex h-12 items-center gap-2 rounded-brand bg-dorado px-6 text-sm font-semibold transition-colors hover:bg-dorado/90"
           >
             <ArrowUpRight className="size-5" aria-hidden="true" />
             Reservar turno
-          </a>
+          </Link>
           <a
             href="#servicios"
             className="text-sm font-semibold transition-colors hover:text-dorado"
