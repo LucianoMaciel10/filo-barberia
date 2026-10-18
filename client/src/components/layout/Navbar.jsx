@@ -2,18 +2,35 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import Logo from "./Logo";
 import { business } from "../../data/business";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
+import UserMenu from "./UserMenu";
 
-const links = [
-  { label: "Servicios", href: "/#servicios" },
-  { label: "El equipo", href: "/#equipo" },
-  { label: "La barbería", href: "/#barberia" },
+const publicLinks = [
+  { label: "Servicios", to: "/#servicios" },
+  { label: "El equipo", to: "/#equipo" },
+  { label: "La barbería", to: "/#barberia" },
+];
+
+const clientLinks = [
+  { label: "Reservar turno", to: "/reservar" },
+  { label: "Mis turnos", to: "/mis-turnos" },
 ];
 
 function Navbar() {
   const [open, setOpen] = useState(false);
-  const closeMenu = () => setOpen(false);
   const { pathname } = useLocation();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const navLinks = user ? clientLinks : publicLinks;
+
+  const handleLogout = () => {
+    closeMenu();
+    logout();
+    navigate("/");
+  };
+
+  const closeMenu = () => setOpen(false);
 
   const handleLogoClick = () => {
     closeMenu();
@@ -54,10 +71,10 @@ function Navbar() {
 
         {/* Links desktop */}
         <ul className="hidden items-center gap-8 md:flex">
-          {links.map((link) => (
-            <li key={link.href}>
+          {navLinks.map((link) => (
+            <li key={link.to}>
               <Link
-                to={link.href}
+                to={link.to}
                 className="text-sm transition-colors hover:text-dorado"
               >
                 {link.label}
@@ -65,12 +82,16 @@ function Navbar() {
             </li>
           ))}
           <li>
-            <Link
-              to="/login"
-              className="rounded-brand border border-borde bg-white px-5 py-3 text-sm font-semibold transition-colors hover:border-dorado"
-            >
-              Ingresá
-            </Link>
+            {user ? (
+              <UserMenu />
+            ) : (
+              <Link
+                to="/login"
+                className="rounded-brand border border-borde bg-white px-5 py-3 text-sm font-semibold transition-colors hover:border-dorado"
+              >
+                Ingresá
+              </Link>
+            )}
           </li>
         </ul>
 
@@ -99,30 +120,51 @@ function Navbar() {
                 Inicio
               </Link>
             </li>
-            {links.map((link) => (
-              <li key={link.href}>
-                <Link to={link.href} onClick={closeMenu}>
+            {navLinks.map((link) => (
+              <li key={link.to}>
+                <Link to={link.to} onClick={closeMenu}>
                   {link.label}
                 </Link>
               </li>
             ))}
+            {user && (
+              <li>
+                <Link to="/perfil" onClick={closeMenu}>
+                  Mi perfil
+                </Link>
+              </li>
+            )}
           </ul>
 
           <div className="mt-10 space-y-3">
-            <a
-              href="#"
-              onClick={closeMenu}
-              className="block rounded-brand bg-dorado py-3 text-center text-sm font-semibold text-charcoal"
-            >
-              Reservar turno
-            </a>
-            <Link
-              to="/login"
-              onClick={closeMenu}
-              className="block rounded-brand bg-dorado py-3 text-center text-sm font-semibold text-charcoal"
-            >
-              Ingresá a tu cuenta
-            </Link>
+            <div className="mt-10 space-y-3">
+              {user ? (
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="block w-full cursor-pointer rounded-brand border border-fondo/30 py-3 text-center text-sm font-semibold"
+                >
+                  Cerrar sesión
+                </button>
+              ) : (
+                <>
+                  <a
+                    href="#"
+                    onClick={closeMenu}
+                    className="block rounded-brand bg-dorado py-3 text-center text-sm font-semibold text-charcoal"
+                  >
+                    Reservar turno
+                  </a>
+                  <Link
+                    to="/login"
+                    onClick={closeMenu}
+                    className="block rounded-brand bg-dorado py-3 text-center text-sm font-semibold text-charcoal"
+                  >
+                    Ingresá a tu cuenta
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
 
           <div className="mt-auto space-y-4 border-t border-fondo/15 pt-6 text-sm">
