@@ -6,6 +6,8 @@ import AuthLayout from "../components/layout/AuthLayout";
 import Input from "../components/ui/Input";
 import FormAlert from "../components/ui/FormAlert";
 import { useFocusFirstError } from "../hooks/useFocusFirstError";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 const schema = z.object({
   email: z.email("Ingresá un correo válido"),
@@ -19,12 +21,17 @@ function Login() {
     setFocus,
     formState: { errors, isSubmitting, submitCount },
   } = useForm({ resolver: zodResolver(schema), shouldFocusError: false });
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
   const hasErrors = Object.keys(errors).length > 0;
+
   useFocusFirstError({ errors, submitCount, setFocus });
 
   const onSubmit = async (data) => {
-    // TODO: conectar con la API cuando esté el backend
-    console.log("login", data.email);
+    // TODO: reemplazar por la llamada a la API
+    login({ name: "Tomás Molina", email: data.email });
+    navigate("/");
   };
 
   return (
