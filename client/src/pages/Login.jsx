@@ -6,7 +6,7 @@ import AuthLayout from "../components/layout/AuthLayout";
 import Input from "../components/ui/Input";
 import FormAlert from "../components/ui/FormAlert";
 import { useFocusFirstError } from "../hooks/useFocusFirstError";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
 const schema = z.object({
@@ -23,6 +23,7 @@ function Login() {
   } = useForm({ resolver: zodResolver(schema), shouldFocusError: false });
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const hasErrors = Object.keys(errors).length > 0;
 
@@ -31,7 +32,7 @@ function Login() {
   const onSubmit = async (data) => {
     // TODO: reemplazar por la llamada a la API
     login({ name: "Tomás Molina", email: data.email });
-    navigate("/");
+    navigate(location.state?.from ?? "/", { replace: true });
   };
 
   return (
