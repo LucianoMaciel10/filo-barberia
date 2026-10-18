@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Scissors } from "lucide-react";
 
 function NotFound() {
   return (
@@ -10,9 +11,13 @@ function NotFound() {
         404
       </p>
 
-      <div className="mt-8 flex flex-col gap-1.5" aria-hidden="true">
-        <span className="size-3.5 rounded-full border-2 border-dorado" />
-        <span className="size-3.5 rounded-full border-2 border-dorado" />
+      <div
+        className="mt-8 flex w-full max-w-xs items-center gap-3"
+        aria-hidden="true"
+      >
+        <span className="flex-1 border-t border-dashed border-dorado/60" />
+        <Scissors className="size-7 text-dorado" strokeWidth={1.5} />
+        <span className="flex-1 border-t border-dashed border-dorado/60" />
       </div>
 
       <h1 className="mt-8 max-w-md text-[28px] leading-tight md:max-w-none md:text-[40px]">
