@@ -4,6 +4,7 @@ import BookingSummary from "../../components/booking/BookingSummary";
 import { services } from "../../data/services";
 import { useBooking } from "../../hooks/useBooking";
 import { formatPrice } from "../../utils/format";
+import StepActions from "../../components/booking/StepActions";
 
 function ServiceStep() {
   const { selection, service, update } = useBooking();
@@ -25,7 +26,9 @@ function ServiceStep() {
                 name="service"
                 value={item.id}
                 checked={selection.serviceId === item.id}
-                onChange={() => update({ serviceId: item.id })}
+                onChange={() =>
+                  update({ serviceId: item.id, date: null, time: null })
+                }
                 className="peer sr-only"
               />
 
@@ -53,17 +56,10 @@ function ServiceStep() {
       </fieldset>
 
       <BookingSummary>
-        <button
-          type="button"
-          disabled={!service}
-          onClick={() => navigate("/reservar/barbero")}
-          className="mt-4 h-12 w-full cursor-pointer rounded-brand bg-dorado text-sm font-semibold transition-colors hover:bg-dorado/90 disabled:cursor-not-allowed disabled:bg-arena disabled:text-charcoal/40 disabled:hover:bg-arena"
-        >
-          Continuar
-        </button>
-        <p className="mt-3 text-xs text-charcoal/60">
-          Podés cambiar tu elección antes de confirmar.
-        </p>
+        <StepActions
+          canContinue={!!service}
+          onContinue={() => navigate("/reservar/barbero")}
+        />
       </BookingSummary>
     </div>
   );
