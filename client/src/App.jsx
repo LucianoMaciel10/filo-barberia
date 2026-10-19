@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import BookingLayout from "./components/booking/BookingLayout";
 import ServiceStep from "./pages/booking/ServiceStep";
+import BarberStep from "./pages/booking/BarberStep";
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
             <Route path="/reservar" element={<BookingLayout />}>
               <Route index element={<Navigate to="servicio" replace />} />
               <Route path="servicio" element={<ServiceStep />} />
+              <Route path="barbero" element={<BarberStep />} />
             </Route>
           </Route>
 

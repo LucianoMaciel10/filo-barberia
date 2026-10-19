@@ -22,3 +22,11 @@ export const barbers = [
     photo: lucia,
   },
 ];
+
+export const ANY_BARBER_ID = "cualquiera";
+
+export const anyBarber = {
+  id: ANY_BARBER_ID,
+  name: "Cualquiera",
+  specialty: "El primer barbero disponible. Mismo cuidado, menos espera.",
+};
