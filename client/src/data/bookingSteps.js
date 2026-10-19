@@ -9,7 +9,7 @@ export const bookingSteps = [
     path: "barbero",
     label: "Barbero",
     title: "¿Con quién te cortás?",
-    subtitle: "Elegí a tu barbero o dejá que te asignemos uno.",
+    subtitle: "Elegí a tu barbero de confianza o dejalo en nuestras manos.",
   },
   {
     path: "fecha",
@@ -24,3 +24,11 @@ export const bookingSteps = [
     subtitle: "Revisá los datos antes de confirmar tu turno.",
   },
 ];
+
+// Índice del primer paso incompleto: hasta ahí se puede navegar
+export function getReachableStep(selection) {
+  if (!selection.serviceId) return 0;
+  if (!selection.barberId) return 1;
+  if (!selection.date || !selection.time) return 2;
+  return 3;
+}
