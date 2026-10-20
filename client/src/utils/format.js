@@ -1,3 +1,6 @@
+import { format, parseISO } from "date-fns";
+import { es } from "date-fns/locale";
+
 export function formatPrice(amount) {
   return `$ ${new Intl.NumberFormat("es-AR").format(amount)}`;
 }
@@ -7,3 +10,14 @@ export function shortName(fullName) {
   const lastInitial = rest.length ? ` ${rest[rest.length - 1][0]}.` : "";
   return `${first}${lastInitial}`;
 }
+
+export const capitalize = (text) =>
+  text.charAt(0).toUpperCase() + text.slice(1);
+
+// Date → "Viernes 16 de octubre"
+export const formatLongDate = (date) =>
+  capitalize(format(date, "EEEE d 'de' MMMM", { locale: es }));
+
+// "2026-10-16" → "16 oct"
+export const formatShortDate = (dateKey) =>
+  format(parseISO(dateKey), "d MMM", { locale: es });
