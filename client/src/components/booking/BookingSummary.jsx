@@ -1,9 +1,10 @@
 import { ANY_BARBER_ID } from "../../data/barbers";
 import { useBooking } from "../../hooks/useBooking";
 import { formatPrice } from "../../utils/format";
+import { formatShortDate } from "../../utils/format";
 
 function BookingSummary({ children }) {
-  const { service, barber } = useBooking();
+  const { service, barber, selection } = useBooking();
 
   return (
     <aside aria-label="Resumen de tu reserva" className="lg:sticky lg:top-28">
@@ -20,6 +21,11 @@ function BookingSummary({ children }) {
                 {barber.id === ANY_BARBER_ID
                   ? "Primer barbero disponible"
                   : barber.name}
+              </p>
+            )}
+            {selection.date && selection.time && (
+              <p className="mt-1 text-sm text-charcoal/70">
+                {formatShortDate(selection.date)} · {selection.time}
               </p>
             )}
             <p className="mt-2 text-sm font-semibold">
