@@ -31,7 +31,11 @@ function Login() {
 
   const onSubmit = async (data) => {
     // TODO: reemplazar por la llamada a la API
-    login({ name: "Tomás Molina", email: data.email });
+    login({
+      name: "Tomás Molina",
+      email: data.email,
+      phone: "+54 9 11 2345-6789",
+    });
     navigate(location.state?.from ?? "/", { replace: true });
   };
 

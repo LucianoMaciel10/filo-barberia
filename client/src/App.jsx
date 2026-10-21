@@ -10,6 +10,7 @@ import BookingLayout from "./components/booking/BookingLayout";
 import ServiceStep from "./pages/booking/ServiceStep";
 import BarberStep from "./pages/booking/BarberStep";
 import DateStep from "./pages/booking/DateStep";
+import SummaryStep from "./pages/booking/SummaryStep";
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
               <Route path="servicio" element={<ServiceStep />} />
               <Route path="barbero" element={<BarberStep />} />
               <Route path="fecha" element={<DateStep />} />
+              <Route path="resumen" element={<SummaryStep />} />
             </Route>
           </Route>
 

@@ -5,6 +5,7 @@ function StepActions({
   onContinue,
   continueLabel = "Continuar",
   backTo,
+  note = "Podés cambiar tu elección antes de confirmar.",
 }) {
   return (
     <div className="mt-4">
@@ -26,9 +27,7 @@ function StepActions({
         </Link>
       )}
 
-      <p className="mt-3 text-xs text-charcoal/60">
-        Podés cambiar tu elección antes de confirmar.
-      </p>
+      <p className="mt-3 text-xs text-charcoal/60">{note}</p>
     </div>
   );
 }
