@@ -21,3 +21,15 @@ export const formatLongDate = (date) =>
 // "2026-10-16" → "16 oct"
 export const formatShortDate = (dateKey) =>
   format(parseISO(dateKey), "d MMM", { locale: es });
+
+// Date → "Viernes 16 de octubre de 2026"
+export const formatFullDate = (date) =>
+  capitalize(format(date, "EEEE d 'de' MMMM 'de' yyyy", { locale: es }));
+
+// ("16:00", 45) → "16:00 a 16:45"
+export function formatTimeRange(time, duration) {
+  const [hours, minutes] = time.split(":").map(Number);
+  const end = hours * 60 + minutes + duration;
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${time} a ${pad(Math.floor(end / 60))}:${pad(end % 60)}`;
+}

@@ -30,3 +30,6 @@ export const anyBarber = {
   name: "Cualquiera",
   specialty: "El primer barbero disponible. Mismo cuidado, menos espera.",
 };
+
+export const getBarberLabel = (barber) =>
+  barber.id === ANY_BARBER_ID ? "Primer barbero disponible" : barber.name;

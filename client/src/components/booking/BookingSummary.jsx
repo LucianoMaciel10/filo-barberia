@@ -1,4 +1,4 @@
-import { ANY_BARBER_ID } from "../../data/barbers";
+import { getBarberLabel } from "../../data/barbers";
 import { useBooking } from "../../hooks/useBooking";
 import { formatPrice } from "../../utils/format";
 import { formatShortDate } from "../../utils/format";
@@ -18,9 +18,7 @@ function BookingSummary({ children }) {
             </p>
             {barber && (
               <p className="mt-1 text-sm text-charcoal/70">
-                {barber.id === ANY_BARBER_ID
-                  ? "Primer barbero disponible"
-                  : barber.name}
+                {getBarberLabel(barber)}
               </p>
             )}
             {selection.date && selection.time && (
