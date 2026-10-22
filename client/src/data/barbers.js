@@ -33,3 +33,6 @@ export const anyBarber = {
 
 export const getBarberLabel = (barber) =>
   barber.id === ANY_BARBER_ID ? "Primer barbero disponible" : barber.name;
+
+export const getBarberById = (id) =>
+  [anyBarber, ...barbers].find((barber) => barber.id === id) ?? null;

@@ -14,6 +14,7 @@ import {
   formatPrice,
   formatTimeRange,
 } from "../../utils/format";
+import DetailList from "../../components/booking/DetailList";
 
 function SummaryStep() {
   const { selection, service, barber } = useBooking();
@@ -53,33 +54,12 @@ function SummaryStep() {
         <section className="rounded-brand border border-borde bg-white p-5 shadow-sm md:p-6">
           <h2 className="text-2xl md:text-3xl">Tu turno en Filo</h2>
 
-          <dl className="mt-6 space-y-4 text-sm">
-            {rows.map(([label, value]) => (
-              <div key={label} className="flex gap-2">
-                <dt className="text-charcoal/60">{label}</dt>
-                <dd className="flex gap-2">
-                  <span aria-hidden="true" className="text-charcoal/40">
-                    ·
-                  </span>
-                  <span className="font-medium">{value}</span>
-                </dd>
-              </div>
-            ))}
-          </dl>
-
-          <dl className="mt-5 border-t border-borde pt-5 text-sm">
-            <div className="flex gap-2">
-              <dt className="text-charcoal/60">Total · ARS</dt>
-              <dd className="flex gap-2">
-                <span aria-hidden="true" className="text-charcoal/40">
-                  ·
-                </span>
-                <span className="font-semibold">
-                  {formatPrice(service.price)}
-                </span>
-              </dd>
-            </div>
-          </dl>
+          <DetailList rows={rows} className="mt-6" />
+          <DetailList
+            rows={[["Total · ARS", formatPrice(service.price)]]}
+            valueClassName="font-semibold"
+            className="mt-5 border-t border-borde pt-5"
+          />
         </section>
 
         <section className="rounded-brand border border-borde bg-white p-5 shadow-sm md:p-6">

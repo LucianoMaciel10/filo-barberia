@@ -33,3 +33,5 @@ export function formatTimeRange(time, duration) {
   const pad = (n) => String(n).padStart(2, "0");
   return `${time} a ${pad(Math.floor(end / 60))}:${pad(end % 60)}`;
 }
+
+export const firstName = (fullName) => fullName.trim().split(/\s+/)[0];

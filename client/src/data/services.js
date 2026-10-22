@@ -28,3 +28,6 @@ export const services = [
     duration: 30,
   },
 ];
+
+export const getServiceById = (id) =>
+  services.find((service) => service.id === id) ?? null;

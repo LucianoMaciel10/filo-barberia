@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { BookingContext } from "./booking-context";
-import { services } from "../data/services";
-import { anyBarber, barbers } from "../data/barbers";
+import { getServiceById, services } from "../data/services";
+import { getBarberById } from "../data/barbers";
 
 const emptySelection = {
   serviceId: null,
@@ -24,10 +24,9 @@ export function BookingProvider({ children }) {
   const update = (changes) => setSelection((prev) => ({ ...prev, ...changes }));
   const reset = () => setSelection(emptySelection);
 
-  const service = services.find((s) => s.id === selection.serviceId) ?? null;
+  const service = getServiceById(selection.serviceId);
 
-  const barber =
-    [anyBarber, ...barbers].find((b) => b.id === selection.barberId) ?? null;
+  const barber = getBarberById(selection.barberId);
 
   return (
     <BookingContext.Provider
