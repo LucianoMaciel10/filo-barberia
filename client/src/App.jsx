@@ -12,6 +12,7 @@ import BarberStep from "./pages/booking/BarberStep";
 import DateStep from "./pages/booking/DateStep";
 import SummaryStep from "./pages/booking/SummaryStep";
 import BookingSuccess from "./pages/booking/BookingSuccess";
+import MyAppointments from "./pages/MyAppointments";
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
               <Route path="resumen" element={<SummaryStep />} />
             </Route>
             <Route path="/turno-confirmado" element={<BookingSuccess />} />
+            <Route path="/mis-turnos" element={<MyAppointments />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />
