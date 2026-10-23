@@ -14,7 +14,7 @@ import {
   formatPrice,
   formatTimeRange,
 } from "../../utils/format";
-import DetailList from "../../components/booking/DetailList";
+import DetailList from "../../components/ui/DetailList";
 
 function SummaryStep() {
   const { selection, service, barber } = useBooking();

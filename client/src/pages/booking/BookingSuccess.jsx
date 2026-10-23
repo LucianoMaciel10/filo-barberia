@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { parseISO } from "date-fns";
 import { CalendarPlus, Check, Info } from "lucide-react";
 import { Link, Navigate, useLocation } from "react-router-dom";
-import DetailList from "../../components/booking/DetailList";
+import DetailList from "../../components/ui/DetailList";
 import StatusBadge from "../../components/ui/StatusBadge";
 import {
   ANY_BARBER_ID,
