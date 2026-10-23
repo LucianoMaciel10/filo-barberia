@@ -35,3 +35,7 @@ export function formatTimeRange(time, duration) {
 }
 
 export const firstName = (fullName) => fullName.trim().split(/\s+/)[0];
+
+// Date → "16 de octubre"
+export const formatDayMonth = (date) =>
+  format(date, "d 'de' MMMM", { locale: es });
