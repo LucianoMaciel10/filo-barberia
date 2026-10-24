@@ -21,7 +21,7 @@ function Input({ label, error, hint, type = "text", ref, ...props }) {
           type={isPassword && show ? "text" : type}
           aria-invalid={!!error}
           aria-describedby={message ? messageId : undefined}
-          className={`h-12 w-full rounded-brand border bg-white px-4 text-sm placeholder:text-charcoal/40 ${
+          className={`h-12 w-full rounded-brand border bg-white px-4 text-sm placeholder:text-charcoal/40 read-only:bg-arena read-only:text-charcoal/70 ${
             error ? "border-cancelado" : "border-borde"
           } ${isPassword ? "pr-12" : ""}`}
           {...props}

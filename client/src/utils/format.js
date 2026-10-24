@@ -39,3 +39,17 @@ export const firstName = (fullName) => fullName.trim().split(/\s+/)[0];
 // Date → "16 de octubre"
 export const formatDayMonth = (date) =>
   format(date, "d 'de' MMMM", { locale: es });
+
+// "Tomás Molina" → "TM"
+export const initials = (fullName) =>
+  fullName
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((word) => word[0])
+    .join("")
+    .toUpperCase();
+
+// "2026-09-12T..." → "septiembre de 2026"
+export const formatMonthYear = (isoDate) =>
+  format(parseISO(isoDate), "MMMM 'de' yyyy", { locale: es });
