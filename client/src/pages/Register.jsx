@@ -7,19 +7,13 @@ import Checkbox from "../components/ui/Checkbox";
 import Input from "../components/ui/Input";
 import FormAlert from "../components/ui/FormAlert";
 import { useFocusFirstError } from "../hooks/useFocusFirstError";
+import { nameSchema, passwordSchema, phoneSchema } from "../utils/validation";
 
 const schema = z.object({
-  name: z.string().trim().min(3, "Ingresá tu nombre y apellido"),
+  name: nameSchema,
   email: z.email("Ingresá un correo válido"),
-  phone: z
-    .string()
-    .trim()
-    .regex(/^\+?[\d\s-]{8,}$/, "Ingresá un teléfono válido"),
-  password: z
-    .string()
-    .min(8, "Usá al menos 8 caracteres")
-    .regex(/[A-Za-z]/, "Incluí al menos una letra")
-    .regex(/\d/, "Incluí al menos un número"),
+  phone: phoneSchema,
+  password: passwordSchema,
   terms: z.boolean().refine((value) => value, {
     message: "Tenés que aceptar los términos para continuar",
   }),
