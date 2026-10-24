@@ -3,6 +3,7 @@ import { ANY_BARBER_ID, barbers } from "../data/barbers";
 import { business } from "../data/business";
 import { getServiceById } from "../data/services";
 import { getActiveAppointments } from "./appointments";
+import { toMinutes, toTime } from "../utils/time";
 
 const BUSY_RATE = 30; // % de horarios ocupados (simulación de otros clientes)
 const FULL_DAY_RATE = 10; // % de días completos por barbero (simulación)
@@ -16,14 +17,6 @@ function hash(text) {
   }
   return h >>> 0;
 }
-
-const toMinutes = (time) => {
-  const [hours, minutes] = time.split(":").map(Number);
-  return hours * 60 + minutes;
-};
-
-const toTime = (minutes) =>
-  `${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`;
 
 // Dos intervalos se solapan si cada uno empieza antes de que termine el otro
 const overlaps = (aStart, aEnd, bStart, bEnd) => aStart < bEnd && bStart < aEnd;
