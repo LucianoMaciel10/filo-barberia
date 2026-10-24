@@ -13,6 +13,7 @@ import DateStep from "./pages/booking/DateStep";
 import SummaryStep from "./pages/booking/SummaryStep";
 import BookingSuccess from "./pages/booking/BookingSuccess";
 import MyAppointments from "./pages/MyAppointments";
+import Profile from "./pages/Profile";
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
             </Route>
             <Route path="/turno-confirmado" element={<BookingSuccess />} />
             <Route path="/mis-turnos" element={<MyAppointments />} />
+            <Route path="/perfil" element={<Profile />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />
