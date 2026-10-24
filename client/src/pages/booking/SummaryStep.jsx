@@ -15,6 +15,7 @@ import {
   formatTimeRange,
 } from "../../utils/format";
 import DetailList from "../../components/ui/DetailList";
+import { clearBookingDraft } from "../../services/bookingDraft";
 
 function SummaryStep() {
   const { selection, service, barber } = useBooking();
@@ -41,6 +42,7 @@ function SummaryStep() {
 
     try {
       const appointment = await createAppointment({ selection, user });
+      clearBookingDraft();
       navigate("/turno-confirmado", { state: { appointment }, replace: true });
     } catch {
       setError(true);
@@ -67,6 +69,7 @@ function SummaryStep() {
           <p className="mt-3 text-sm text-charcoal/70">{contact}</p>
           <Link
             to="/perfil"
+            state={{ returnTo: "/reservar/resumen" }}
             className="mt-3 inline-block text-xs text-dorado-oscuro hover:underline"
           >
             Editar mis datos

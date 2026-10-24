@@ -1,8 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { BookingContext } from "./booking-context";
-import { getServiceById, services } from "../data/services";
 import { getBarberById } from "../data/barbers";
+import { getServiceById } from "../data/services";
+import {
+  clearBookingDraft,
+  readBookingDraft,
+  writeBookingDraft,
+} from "../services/bookingDraft";
 
 const emptySelection = {
   serviceId: null,
@@ -14,18 +19,27 @@ const emptySelection = {
 export function BookingProvider({ children }) {
   const [searchParams] = useSearchParams();
 
-  // Si viene ?servicio=corte-clasico (desde la landing), arranca preseleccionado
   const [selection, setSelection] = useState(() => {
+    // Si viene ?servicio=... (desde la landing o "Volver a reservar"), arranca de cero con ese servicio
     const fromUrl = searchParams.get("servicio");
-    const isValid = services.some((s) => s.id === fromUrl);
-    return { ...emptySelection, serviceId: isValid ? fromUrl : null };
+    if (getServiceById(fromUrl))
+      return { ...emptySelection, serviceId: fromUrl };
+
+    return readBookingDraft() ?? emptySelection;
   });
 
+  useEffect(() => {
+    writeBookingDraft(selection);
+  }, [selection]);
+
   const update = (changes) => setSelection((prev) => ({ ...prev, ...changes }));
-  const reset = () => setSelection(emptySelection);
+
+  const reset = () => {
+    setSelection(emptySelection);
+    clearBookingDraft();
+  };
 
   const service = getServiceById(selection.serviceId);
-
   const barber = getBarberById(selection.barberId);
 
   return (
