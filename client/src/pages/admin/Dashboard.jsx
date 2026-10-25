@@ -18,14 +18,33 @@ import {
 
 const PREVIEW_COUNT = 5;
 
+// Los umbrales son arbitrarios: ajustalos a lo que sea "mucho" o "poco" para la barbería
+function getWeekHeadline(total, days = 6) {
+  if (total === 0) return "Una semana sin reservas";
+  const average = total / days;
+  if (average < 4) return "Una semana tranquila";
+  if (average < 8) return "Una semana con movimiento";
+  return "Una semana a pleno";
+}
+
 function Dashboard() {
   const { user } = useAuth();
   const [now] = useState(() => new Date());
   const data = useMemo(() => getDashboardData(now), [now]);
-  const { today, week, topService } = data;
+  const { today, week, topService, isNextWeek } = data;
+
+  const weekLabel = isNextWeek ? "Próxima semana" : "Esta semana";
+  const weekInline = isNextWeek ? "la próxima semana" : "esta semana";
+  const shopClosed = !business.schedule[now.getDay()];
 
   const confirmed = today.total - today.cancelled;
   const hasMore = today.total > PREVIEW_COUNT;
+
+  const todaySubtitle = shopClosed
+    ? "Hoy la barbería está cerrada."
+    : hasMore
+      ? `Primeros ${PREVIEW_COUNT} de ${today.total} turnos.`
+      : `${pluralize(today.total, "turno", "turnos")} para hoy.`;
 
   return (
     <>
@@ -59,14 +78,14 @@ function Dashboard() {
           detail={`${pluralize(confirmed, "confirmado", "confirmados")} · ${pluralize(today.cancelled, "cancelado", "cancelados")}`}
         />
         <StatCard
-          label="Esta semana"
+          label={weekLabel}
           value={week.total}
           detail={formatWeekRange(data.weekStart, data.weekEnd)}
         />
         <StatCard
           label="Cancelaciones"
           value={week.cancelled}
-          detail={`Esta semana · ${week.cancelRate}% del total`}
+          detail={`${weekLabel} · ${week.cancelRate}% del total`}
         />
         <StatCard
           compact
@@ -74,8 +93,8 @@ function Dashboard() {
           value={topService?.service.name ?? "—"}
           detail={
             topService
-              ? `${pluralize(topService.count, "turno", "turnos")} esta semana`
-              : "Sin turnos esta semana"
+              ? `${pluralize(topService.count, "turno", "turnos")} ${weekInline}`
+              : `Sin turnos ${weekInline}`
           }
         />
       </dl>
@@ -85,11 +104,11 @@ function Dashboard() {
         className="mt-6 rounded-brand border border-borde bg-white p-5 shadow-sm md:p-6"
       >
         <h2 id="week-title" className="text-2xl md:text-3xl">
-          Una semana con movimiento
+          {getWeekHeadline(week.total)}
         </h2>
         <p className="mt-1 text-xs text-charcoal/60">
-          Turnos por día · {pluralize(week.total, "reserva", "reservas")} esta
-          semana
+          Turnos por día · {pluralize(week.total, "reserva", "reservas")}{" "}
+          {weekInline}
         </p>
         <WeekChart days={data.perDay} todayKey={data.todayKey} />
       </section>
@@ -100,11 +119,7 @@ function Dashboard() {
             <h2 id="today-title" className="text-3xl md:text-4xl">
               Los turnos de hoy
             </h2>
-            <p className="mt-1 text-sm text-charcoal/60">
-              {hasMore
-                ? `Primeros ${PREVIEW_COUNT} de ${today.total} turnos.`
-                : `${pluralize(today.total, "turno", "turnos")} para hoy.`}
-            </p>
+            <p className="mt-1 text-sm text-charcoal/60">{todaySubtitle}</p>
           </div>
 
           {hasMore && (

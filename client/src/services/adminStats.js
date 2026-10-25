@@ -5,7 +5,10 @@ import { getDayAppointments } from "./appointments";
 const toKey = (date) => format(date, "yyyy-MM-dd");
 
 export function getDashboardData(now = new Date()) {
-  const weekStart = startOfWeek(now, { weekStartsOn: 1 });
+  // Los domingos la barbería está cerrada: mostramos la semana que empieza mañana
+  const isNextWeek = now.getDay() === 0;
+  const reference = isNextWeek ? addDays(now, 1) : now;
+  const weekStart = startOfWeek(reference, { weekStartsOn: 1 });
   const weekDays = Array.from({ length: 6 }, (_, i) => addDays(weekStart, i)); // lunes a sábado
 
   const perDay = weekDays.map((date) => {
@@ -32,6 +35,7 @@ export function getDashboardData(now = new Date()) {
   return {
     weekStart,
     weekEnd: weekDays.at(-1),
+    isNextWeek,
     perDay,
     todayKey: toKey(now),
     week: {
