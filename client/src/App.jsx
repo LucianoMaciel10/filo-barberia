@@ -14,6 +14,10 @@ import SummaryStep from "./pages/booking/SummaryStep";
 import BookingSuccess from "./pages/booking/BookingSuccess";
 import MyAppointments from "./pages/MyAppointments";
 import Profile from "./pages/Profile";
+import AdminRoute from "./components/auth/AdminRoute";
+import AdminLayout from "./components/admin/AdminLayout";
+import AdminPlaceholder from "./pages/admin/AdminPlaceholder";
+import Dashboard from "./pages/admin/Dashboard";
 
 export default function App() {
   return (
@@ -40,6 +44,12 @@ export default function App() {
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Register />} />
+        <Route path="/admin" element={<AdminRoute />}>
+          <Route element={<AdminLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="*" element={<AdminPlaceholder />} />
+          </Route>
+        </Route>
       </Routes>
     </>
   );
