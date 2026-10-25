@@ -2,29 +2,12 @@ import { format, isBefore, isSameDay, startOfDay } from "date-fns";
 import { ANY_BARBER_ID, barbers } from "../data/barbers";
 import { business } from "../data/business";
 import { getServiceById } from "../data/services";
-import { getActiveAppointments } from "./appointments";
 import { toMinutes, toTime } from "../utils/time";
-
-const BUSY_RATE = 30; // % de horarios ocupados (simulación de otros clientes)
-const FULL_DAY_RATE = 10; // % de días completos por barbero (simulación)
-
-// Hash determinístico (FNV-1a): mismo texto, mismo número
-function hash(text) {
-  let h = 2166136261;
-  for (let i = 0; i < text.length; i++) {
-    h ^= text.charCodeAt(i);
-    h = Math.imul(h, 16777619);
-  }
-  return h >>> 0;
-}
+import { getActiveAppointments } from "./appointments";
+import { isBarberOff } from "./demoAgenda";
 
 // Dos intervalos se solapan si cada uno empieza antes de que termine el otro
 const overlaps = (aStart, aEnd, bStart, bEnd) => aStart < bEnd && bStart < aEnd;
-
-function isBarberSimulatedBusy(barberId, dateKey, time) {
-  if (hash(`full|${barberId}|${dateKey}`) % 100 < FULL_DAY_RATE) return true;
-  return hash(`${barberId}|${dateKey}|${time}`) % 100 < BUSY_RATE;
-}
 
 function getBookedRanges(dateKey) {
   return getActiveAppointments(dateKey).map((appointment) => {
@@ -55,13 +38,12 @@ export function getDaySlots(date, duration, barberId, now = new Date()) {
     if (start <= nowMinutes) continue; // horarios que ya pasaron hoy
 
     const end = start + duration;
-    const time = toTime(start);
     const overlapping = booked.filter((range) =>
       overlaps(start, end, range.start, range.end),
     );
 
     const isBusy = (id) =>
-      isBarberSimulatedBusy(id, dateKey, time) ||
+      isBarberOff(id, dateKey) ||
       overlapping.some((range) => range.barberId === id);
 
     let taken;
@@ -77,7 +59,7 @@ export function getDaySlots(date, duration, barberId, now = new Date()) {
       taken = isBusy(barberId);
     }
 
-    slots.push({ time, taken });
+    slots.push({ time: toTime(start), taken });
   }
   return slots;
 }

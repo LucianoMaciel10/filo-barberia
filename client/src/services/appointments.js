@@ -8,6 +8,7 @@ import {
   subDays,
 } from "date-fns";
 import { getServiceById } from "../data/services";
+import { getDemoAppointments } from "./demoAgenda";
 
 const STORAGE_KEY = "filo-appointments";
 const CANCEL_LIMIT_MINUTES = 120; // se puede cancelar hasta 2 horas antes
@@ -91,11 +92,23 @@ export function canCancel(appointment, now = new Date()) {
   );
 }
 
-// Turnos no cancelados de un día, de todos los usuarios (la agenda es de la barbería)
+// Todos los turnos de un día (de ejemplo y reales), ordenados por hora
+export function getDayAppointments(dateKey) {
+  const real = readAll().filter((appointment) => appointment.date === dateKey);
+
+  return [...getDemoAppointments(dateKey), ...real]
+    .map((appointment) => ({
+      ...appointment,
+      clientName: appointment.clientName ?? appointment.userEmail,
+      displayStatus: getDisplayStatus(appointment),
+    }))
+    .sort((a, b) => a.time.localeCompare(b.time));
+}
+
+// Los que ocupan agenda: todos menos los cancelados
 export function getActiveAppointments(dateKey) {
-  return readAll().filter(
-    (appointment) =>
-      appointment.date === dateKey && appointment.status !== "cancelled",
+  return getDayAppointments(dateKey).filter(
+    (appointment) => appointment.status !== "cancelled",
   );
 }
 
@@ -117,6 +130,8 @@ export async function createAppointment({ selection, user }) {
     id: `apt_${Date.now().toString(36)}`,
     ...selection, // serviceId, barberId, date, time
     userEmail: user.email,
+    clientName: user.name,
+    clientPhone: user.phone,
     status: "confirmed",
   };
 
