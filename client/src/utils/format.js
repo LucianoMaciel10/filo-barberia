@@ -57,3 +57,26 @@ export const formatMonthYear = (isoDate) =>
 // ("16:00", 45) → "16:00 a 16:45"
 export const formatTimeRange = (time, duration) =>
   `${time} a ${toTime(toMinutes(time) + duration)}`;
+
+const weekdayName = (date, pattern) => capitalize(formatEs(date, pattern));
+
+// Date → "Lun" / "Lunes"
+export const weekdayShort = (date) => weekdayName(date, "EEE");
+export const weekdayLong = (date) => weekdayName(date, "EEEE");
+
+// (12 oct, 17 oct) → "Del 12 al 17 de octubre"
+export function formatWeekRange(start, end) {
+  const sameMonth = start.getMonth() === end.getMonth();
+  return `Del ${sameMonth ? format(start, "d") : formatDayMonth(start)} al ${formatDayMonth(end)}`;
+}
+
+// (3, "turno", "turnos") → "3 turnos"
+export const pluralize = (count, one, many) =>
+  `${count} ${count === 1 ? one : many}`;
+
+export function greeting(date = new Date()) {
+  const hour = date.getHours();
+  if (hour < 12) return "Buen día";
+  if (hour < 20) return "Buenas tardes";
+  return "Buenas noches";
+}
