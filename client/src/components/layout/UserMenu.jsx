@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, LogOut, User } from "lucide-react";
+import { ChevronDown, LayoutDashboard, LogOut, User } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { shortName } from "../../utils/format";
@@ -56,6 +56,18 @@ function UserMenu() {
           id="user-menu"
           className="absolute right-0 top-full mt-2 w-48 rounded-brand border border-borde bg-white p-1 text-sm shadow-lg"
         >
+          {user.role === "admin" && (
+            <li>
+              <Link
+                to="/admin"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2 rounded-lg px-3 py-2.5 transition-colors hover:bg-arena"
+              >
+                <LayoutDashboard className="size-4" aria-hidden="true" />
+                Panel de administración
+              </Link>
+            </li>
+          )}
           <li>
             <Link
               to="/perfil"

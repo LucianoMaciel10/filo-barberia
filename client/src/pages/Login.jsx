@@ -9,6 +9,8 @@ import { useFocusFirstError } from "../hooks/useFocusFirstError";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
+const ADMIN_EMAIL = "admin@filo.com";
+
 const schema = z.object({
   email: z.email("Ingresá un correo válido"),
   password: z.string().min(1, "Ingresá tu contraseña"),
@@ -31,12 +33,31 @@ function Login() {
 
   const onSubmit = async (data) => {
     // TODO: reemplazar por la llamada a la API
-    login({
-      name: "Tomás Molina",
-      email: data.email,
-      phone: "+54 9 11 2345-6789",
-    });
-    navigate(location.state?.from ?? "/", { replace: true });
+    const isAdmin = data.email.toLowerCase() === ADMIN_EMAIL;
+    const from = location.state?.from;
+
+    login(
+      isAdmin
+        ? {
+            name: "Valentina Ruiz",
+            email: data.email,
+            phone: "+54 9 11 5555-4820",
+            role: "admin",
+          }
+        : {
+            name: "Tomás Molina",
+            email: data.email,
+            phone: "+54 9 11 2345-6789",
+            role: "client",
+          },
+    );
+
+    navigate(
+      isAdmin ? (from?.startsWith("/admin") ? from : "/admin") : (from ?? "/"),
+      {
+        replace: true,
+      },
+    );
   };
 
   return (
@@ -91,6 +112,10 @@ function Login() {
           {isSubmitting ? "Ingresando..." : "Ingresar"}
         </button>
       </form>
+
+      <p className="mt-4 text-center text-xs text-charcoal/60">
+        Demo: ingresá con admin@filo.com para ver el panel de administración.
+      </p>
 
       <p className="mt-6 text-center text-sm">
         ¿Todavía no tenés cuenta?{" "}
