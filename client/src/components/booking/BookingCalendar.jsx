@@ -24,6 +24,8 @@ const STATUS_LABEL = {
   full: "completo",
   over: "sin horarios disponibles hoy",
 };
+// "over" (hoy sin horarios) NO se bloquea: se puede abrir para ver la explicación
+const BLOCKED = ["past", "closed", "full"];
 
 const navButton =
   "flex size-10 cursor-pointer items-center justify-center rounded-lg transition-colors hover:bg-arena disabled:cursor-not-allowed disabled:text-charcoal/30 disabled:hover:bg-transparent";
@@ -91,7 +93,7 @@ function BookingCalendar({ selectedDate, duration, barberId, onSelect }) {
         {days.map((day) => {
           const dateKey = format(day, "yyyy-MM-dd");
           const status = getDayStatus(day, duration, barberId);
-          const disabled = status !== "available";
+          const blocked = BLOCKED.includes(status);
           const isSelected = dateKey === selectedDate;
           const isToday = isSameDay(day, today);
 
@@ -99,18 +101,20 @@ function BookingCalendar({ selectedDate, duration, barberId, onSelect }) {
             ? "bg-dorado font-semibold"
             : status === "full"
               ? "cursor-not-allowed text-charcoal/40 line-through"
-              : disabled
+              : blocked
                 ? "cursor-not-allowed text-charcoal/30"
-                : "hover:bg-arena";
+                : status === "over"
+                  ? "text-charcoal/50 hover:bg-arena"
+                  : "hover:bg-arena";
           const todayStyle = isToday && !isSelected ? "bg-dorado-suave" : "";
 
           return (
             <button
               key={dateKey}
               type="button"
-              disabled={disabled}
+              disabled={blocked}
               aria-pressed={isSelected}
-              aria-label={`${formatLongDate(day)}${disabled ? `, ${STATUS_LABEL[status]}` : ""}`}
+              aria-label={`${formatLongDate(day)}${status !== "available" ? `, ${STATUS_LABEL[status]}` : ""}`}
               onClick={() => onSelect(dateKey)}
               className={`mx-auto flex h-10 w-full max-w-12 cursor-pointer items-center justify-center rounded-lg text-sm transition-colors ${stateStyle} ${todayStyle}`}
             >

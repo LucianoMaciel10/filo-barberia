@@ -1,10 +1,14 @@
-import { format, isBefore, isSameDay, startOfDay } from "date-fns";
+import { addDays, format, isBefore, isSameDay, startOfDay } from "date-fns";
 import { ANY_BARBER_ID, barbers } from "../data/barbers";
 import { business } from "../data/business";
 import { getServiceById } from "../data/services";
 import { toMinutes, toTime } from "../utils/time";
 import { getActiveAppointments } from "./appointments";
 import { isBarberOff } from "./demoAgenda";
+
+// Anticipación mínima para reservar. Con 0, se puede reservar hasta que el turno empieza.
+// Con 60, no se pueden reservar turnos que empiezan en la próxima hora.
+const MIN_NOTICE_MINUTES = 0;
 
 // Dos intervalos se solapan si cada uno empieza antes de que termine el otro
 const overlaps = (aStart, aEnd, bStart, bEnd) => aStart < bEnd && bStart < aEnd;
@@ -20,6 +24,17 @@ function getBookedRanges(dateKey) {
   });
 }
 
+// Hora en la que empieza el último turno del día ("19:30"), o null si cierra
+export function getLastSlotStart(date, duration) {
+  const hours = business.schedule[date.getDay()];
+  if (!hours) return null;
+
+  const open = toMinutes(hours.open);
+  const close = toMinutes(hours.close);
+  const count = Math.floor((close - open) / duration);
+  return count > 0 ? toTime(open + (count - 1) * duration) : null;
+}
+
 // TODO: reemplazar por una llamada a la API cuando esté el backend
 export function getDaySlots(date, duration, barberId, now = new Date()) {
   const hours = business.schedule[date.getDay()];
@@ -28,14 +43,14 @@ export function getDaySlots(date, duration, barberId, now = new Date()) {
   const dateKey = format(date, "yyyy-MM-dd");
   const open = toMinutes(hours.open);
   const close = toMinutes(hours.close);
-  const nowMinutes = isSameDay(date, now)
-    ? now.getHours() * 60 + now.getMinutes()
+  const earliestStart = isSameDay(date, now)
+    ? now.getHours() * 60 + now.getMinutes() + MIN_NOTICE_MINUTES
     : -1;
   const booked = getBookedRanges(dateKey);
 
   const slots = [];
   for (let start = open; start + duration <= close; start += duration) {
-    if (start <= nowMinutes) continue; // horarios que ya pasaron hoy
+    if (start <= earliestStart) continue; // horarios que ya pasaron hoy
 
     const end = start + duration;
     const overlapping = booked.filter((range) =>
@@ -71,4 +86,20 @@ export function getDayStatus(date, duration, barberId, now = new Date()) {
   const slots = getDaySlots(date, duration, barberId, now);
   if (slots.length === 0) return "over"; // hoy ya no quedan horarios
   return slots.some((slot) => !slot.taken) ? "available" : "full";
+}
+
+// Día que se propone al entrar al paso: hoy si se puede abrir, o el primero que siga
+export function getDefaultDate(duration, barberId, now = new Date()) {
+  const today = startOfDay(now);
+
+  for (let i = 0; i < 60; i++) {
+    const day = addDays(today, i);
+    const status = getDayStatus(day, duration, barberId, now);
+
+    // "over" (hoy sin horarios) cuenta: se puede abrir para ver la explicación
+    if (status === "available" || status === "over") {
+      return format(day, "yyyy-MM-dd");
+    }
+  }
+  return null;
 }
