@@ -18,6 +18,7 @@ import AdminRoute from "./components/auth/AdminRoute";
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminPlaceholder from "./pages/admin/AdminPlaceholder";
 import Dashboard from "./pages/admin/Dashboard";
+import Agenda from "./pages/admin/Agenda";
 
 export default function App() {
   return (
@@ -47,6 +48,7 @@ export default function App() {
         <Route path="/admin" element={<AdminRoute />}>
           <Route element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
+            <Route path="agenda" element={<Agenda />} />
             <Route path="*" element={<AdminPlaceholder />} />
           </Route>
         </Route>
