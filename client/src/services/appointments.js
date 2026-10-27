@@ -30,6 +30,24 @@ function writeAll(list) {
   }
 }
 
+const DEMO_CANCELLED_KEY = "filo-demo-cancelled";
+
+function readDemoCancelled() {
+  try {
+    return JSON.parse(localStorage.getItem(DEMO_CANCELLED_KEY)) ?? [];
+  } catch {
+    return [];
+  }
+}
+
+function writeDemoCancelled(ids) {
+  try {
+    localStorage.setItem(DEMO_CANCELLED_KEY, JSON.stringify(ids));
+  } catch {
+    // ignorar
+  }
+}
+
 // Turnos de ejemplo para que el historial no arranque vacío
 function seedHistory(email) {
   const flag = `filo-seeded:${email}`;
@@ -94,9 +112,15 @@ export function canCancel(appointment, now = new Date()) {
 
 // Todos los turnos de un día (de ejemplo y reales), ordenados por hora
 export function getDayAppointments(dateKey) {
+  const cancelledDemo = new Set(readDemoCancelled());
+  const demo = getDemoAppointments(dateKey).map((appointment) =>
+    cancelledDemo.has(appointment.id)
+      ? { ...appointment, status: "cancelled" }
+      : appointment,
+  );
   const real = readAll().filter((appointment) => appointment.date === dateKey);
 
-  return [...getDemoAppointments(dateKey), ...real]
+  return [...demo, ...real]
     .map((appointment) => ({
       ...appointment,
       clientName: appointment.clientName ?? appointment.userEmail,
@@ -141,6 +165,12 @@ export async function createAppointment({ selection, user }) {
 
 export async function cancelAppointment(id) {
   await delay(500);
+
+  // Los turnos de ejemplo no están guardados: solo se recuerda que se cancelaron
+  if (id.startsWith("demo_")) {
+    writeDemoCancelled([...new Set([...readDemoCancelled(), id])]);
+    return;
+  }
 
   writeAll(
     readAll().map((appointment) =>

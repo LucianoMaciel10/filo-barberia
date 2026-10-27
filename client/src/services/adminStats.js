@@ -4,11 +4,15 @@ import { getDayAppointments } from "./appointments";
 
 const toKey = (date) => format(date, "yyyy-MM-dd");
 
+// Los domingos la barbería está cerrada: la semana de trabajo es la que empieza mañana
+export function getWorkWeekStart(now = new Date()) {
+  const reference = now.getDay() === 0 ? addDays(now, 1) : now;
+  return startOfWeek(reference, { weekStartsOn: 1 });
+}
+
 export function getDashboardData(now = new Date()) {
-  // Los domingos la barbería está cerrada: mostramos la semana que empieza mañana
   const isNextWeek = now.getDay() === 0;
-  const reference = isNextWeek ? addDays(now, 1) : now;
-  const weekStart = startOfWeek(reference, { weekStartsOn: 1 });
+  const weekStart = getWorkWeekStart(now);
   const weekDays = Array.from({ length: 6 }, (_, i) => addDays(weekStart, i)); // lunes a sábado
 
   const perDay = weekDays.map((date) => {

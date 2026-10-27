@@ -36,3 +36,7 @@ export const getBarberLabel = (barber) =>
 
 export const getBarberById = (id) =>
   [anyBarber, ...barbers].find((barber) => barber.id === id) ?? null;
+
+// En el panel, un turno reservado con "Cualquiera" figura como "Sin asignar"
+export const getAdminBarberLabel = (barber) =>
+  barber.id === ANY_BARBER_ID ? "Sin asignar" : barber.name;

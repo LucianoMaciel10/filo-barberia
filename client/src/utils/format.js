@@ -80,3 +80,12 @@ export function greeting(date = new Date()) {
   if (hour < 20) return "Buenas tardes";
   return "Buenas noches";
 }
+
+// (12 oct, 17 oct) → "12–17 de octubre, 2026"
+export function formatWeekTitle(start, end) {
+  const year = end.getFullYear();
+  if (start.getMonth() === end.getMonth()) {
+    return `${start.getDate()}–${formatEs(end, "d 'de' MMMM")}, ${year}`;
+  }
+  return `${formatDayMonth(start)} – ${formatDayMonth(end)}, ${year}`;
+}

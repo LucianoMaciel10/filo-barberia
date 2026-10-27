@@ -38,6 +38,18 @@ export function isBarberOff(barberId, dateKey) {
   return hash(`off|${barberId}|${dateKey}`) % 100 < DAY_OFF_RATE;
 }
 
+const toEmail = (name) =>
+  `${name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, ".")}@gmail.com`;
+
+function toPhone(seed) {
+  const n = hash(`phone|${seed}`);
+  return `+54 9 11 ${2000 + (n % 8000)}-${1000 + ((n >>> 8) % 9000)}`;
+}
+
 // TODO: desaparece cuando haya backend: los turnos vienen de la base de datos
 export function getDemoAppointments(dateKey) {
   const hours = business.schedule[parseISO(dateKey).getDay()];
@@ -61,13 +73,17 @@ export function getDemoAppointments(dateKey) {
       const service = services[hash(`service|${seed}`) % services.length];
       if (cursor + service.duration > close) break;
 
+      const clientName = CLIENTS[hash(`client|${seed}`) % CLIENTS.length];
+
       result.push({
         id: `demo_${barber.id}_${dateKey}_${cursor}`,
         serviceId: service.id,
         barberId: barber.id,
         date: dateKey,
         time: toTime(cursor),
-        clientName: CLIENTS[hash(`client|${seed}`) % CLIENTS.length],
+        clientName,
+        userEmail: toEmail(clientName),
+        clientPhone: toPhone(seed),
         status:
           hash(`cancel|${seed}`) % 100 < CANCEL_RATE
             ? "cancelled"
