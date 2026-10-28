@@ -19,6 +19,7 @@ import AdminLayout from "./components/admin/AdminLayout";
 import AdminPlaceholder from "./pages/admin/AdminPlaceholder";
 import Dashboard from "./pages/admin/Dashboard";
 import Agenda from "./pages/admin/Agenda";
+import Appointments from "./pages/admin/Appointments";
 
 export default function App() {
   return (
@@ -49,6 +50,7 @@ export default function App() {
           <Route element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="agenda" element={<Agenda />} />
+            <Route path="turnos" element={<Appointments />} />
             <Route path="*" element={<AdminPlaceholder />} />
           </Route>
         </Route>
