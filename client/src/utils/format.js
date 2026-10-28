@@ -89,3 +89,7 @@ export function formatWeekTitle(start, end) {
   }
   return `${formatDayMonth(start)} – ${formatDayMonth(end)}, ${year}`;
 }
+
+// "2026-10-16" → "16 oct 2026"
+export const formatDateWithYear = (dateKey) =>
+  formatEs(parseISO(dateKey), "d MMM yyyy");
