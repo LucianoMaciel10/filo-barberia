@@ -1,13 +1,12 @@
 import { useMemo, useState } from "react";
-import { addWeeks, format, isSameDay, parseISO } from "date-fns";
+import { addWeeks, format, isSameDay } from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
+import AgendaLegend from "../../components/admin/AgendaLegend";
 import AppointmentDetailDialog from "../../components/admin/AppointmentDetailDialog";
+import CancelAppointmentDialog from "../../components/admin/CancelAppointmentDialog";
 import DayAgenda from "../../components/admin/DayAgenda";
 import PageHeader from "../../components/admin/PageHeader";
 import WeekAgenda from "../../components/admin/WeekAgenda";
-import DetailList from "../../components/ui/DetailList";
-import ConfirmDialog from "../../components/ui/ConfirmDialog";
 import FormAlert from "../../components/ui/FormAlert";
 import Select from "../../components/ui/Select";
 import {
@@ -17,12 +16,9 @@ import {
   getBarberById,
 } from "../../data/barbers";
 import { business } from "../../data/business";
-import { getServiceById } from "../../data/services";
 import { getWeekAgenda } from "../../services/agenda";
 import { getWorkWeekStart } from "../../services/adminStats";
-import { cancelAppointment } from "../../services/appointments";
-import { formatDayMonth, formatWeekTitle } from "../../utils/format";
-import AgendaLegend from "../../components/admin/AgendaLegend";
+import { formatWeekTitle } from "../../utils/format";
 
 const barberOptions = [
   ...barbers.map((barber) => ({ value: barber.id, label: barber.name })),
@@ -41,12 +37,13 @@ function Agenda() {
   const [selectedKey, setSelectedKey] = useState(null); // día elegido en mobile
   const [detail, setDetail] = useState(null);
   const [toCancel, setToCancel] = useState(null);
-  const [cancelling, setCancelling] = useState(false);
   const [cancelled, setCancelled] = useState(false);
   const [version, setVersion] = useState(0); // fuerza a releer los turnos tras cancelar
 
   const days = useMemo(
     () => getWeekAgenda(weekStart, barberId),
+    // `version` fuerza a releer los turnos guardados después de cancelar
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [weekStart, barberId, version],
   );
 
@@ -70,17 +67,6 @@ function Agenda() {
     setDetail(null);
     setToCancel(appointment);
   };
-
-  const confirmCancel = async () => {
-    setCancelling(true);
-    await cancelAppointment(toCancel.id);
-    setCancelling(false);
-    setToCancel(null);
-    setVersion((value) => value + 1);
-    setCancelled(true);
-  };
-
-  const cancelService = toCancel && getServiceById(toCancel.serviceId);
 
   return (
     <>
@@ -179,33 +165,15 @@ function Agenda() {
         onCancel={requestCancel}
       />
 
-      <ConfirmDialog
-        open={!!toCancel}
-        busy={cancelling}
-        title="¿Querés cancelar este turno?"
-        description="Vamos a liberar este horario. El cliente va a ver el turno como cancelado."
-        confirmLabel="Sí, cancelar turno"
-        onConfirm={confirmCancel}
-        onCancel={() => setToCancel(null)}
-      >
-        {toCancel && (
-          <DetailList
-            className="mt-6"
-            rows={[
-              ["Cliente", toCancel.clientName],
-              ["Servicio", cancelService.name],
-              [
-                "Fecha",
-                `${formatDayMonth(parseISO(toCancel.date))} · ${toCancel.time}`,
-              ],
-              [
-                "Barbero",
-                getAdminBarberLabel(getBarberById(toCancel.barberId)),
-              ],
-            ]}
-          />
-        )}
-      </ConfirmDialog>
+      <CancelAppointmentDialog
+        appointment={toCancel}
+        onClose={() => setToCancel(null)}
+        onCancelled={() => {
+          setToCancel(null);
+          setVersion((value) => value + 1);
+          setCancelled(true);
+        }}
+      />
     </>
   );
 }
