@@ -1,6 +1,6 @@
 import { useId, useMemo, useState } from "react";
 import { addDays, format, subDays } from "date-fns";
-import { Search, X } from "lucide-react";
+import { FilterX, Search, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import AppointmentDetailDialog from "../../components/admin/AppointmentDetailDialog";
 import AppointmentsTable from "../../components/admin/AppointmentsTable";
@@ -69,6 +69,13 @@ function Appointments() {
   const isDefault = Object.keys(defaults).every(
     (key) => filters[key] === defaults[key],
   );
+
+  const activeCount = [
+    filters.query !== defaults.query,
+    filters.status !== defaults.status,
+    filters.barberId !== defaults.barberId,
+    filters.from !== defaults.from || filters.to !== defaults.to,
+  ].filter(Boolean).length;
 
   // Las fechas escritas a medias no se corrigen mientras se tipea:
   // se acotan solo al calcular el listado
@@ -157,8 +164,8 @@ function Appointments() {
           onChange={(event) => updateFilters({ status: event.target.value })}
         />
 
-        <fieldset>
-          <legend className="text-xs font-semibold">
+        <fieldset className="min-w-0">
+          <legend className="text-xs font-semibold leading-6">
             Fecha (desde — hasta)
           </legend>
           <div className="mt-2 grid grid-cols-2 gap-2">
@@ -171,6 +178,7 @@ function Appointments() {
                 event.target.value &&
                 updateFilters({ from: event.target.value })
               }
+              onBlur={() => filters.from !== from && updateFilters({ from })}
               className={`${fieldClass} px-3`}
             />
             <input
@@ -181,6 +189,7 @@ function Appointments() {
               onChange={(event) =>
                 event.target.value && updateFilters({ to: event.target.value })
               }
+              onBlur={() => filters.to !== to && updateFilters({ to })}
               className={`${fieldClass} px-3`}
             />
           </div>
@@ -192,6 +201,16 @@ function Appointments() {
           value={filters.barberId}
           onChange={(event) => updateFilters({ barberId: event.target.value })}
         />
+
+        <button
+          type="button"
+          onClick={clearFilters}
+          disabled={isDefault}
+          className="inline-flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-brand border border-borde bg-white px-5 text-sm font-semibold transition-colors enabled:border-dorado enabled:bg-dorado-suave enabled:hover:bg-dorado/30 disabled:cursor-not-allowed disabled:text-charcoal/40 lg:col-span-4 lg:h-10 lg:w-auto lg:justify-self-end"
+        >
+          <FilterX className="size-4" aria-hidden="true" />
+          Limpiar filtros{activeCount > 0 && ` (${activeCount})`}
+        </button>
       </form>
 
       <FormAlert
@@ -239,18 +258,6 @@ function Appointments() {
           <p aria-live="polite" className="text-xs text-charcoal/60">
             Mostrando {startIndex + 1}–{startIndex + rows.length} de{" "}
             {pluralize(filtered.length, "resultado", "resultados")}
-            {!isDefault && (
-              <>
-                {" · "}
-                <button
-                  type="button"
-                  onClick={clearFilters}
-                  className="cursor-pointer font-semibold text-dorado-oscuro hover:underline"
-                >
-                  Limpiar filtros
-                </button>
-              </>
-            )}
           </p>
 
           <Pagination
